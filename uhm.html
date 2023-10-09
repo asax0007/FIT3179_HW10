@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Migration to Au</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/pure-min.css" integrity="sha384-Uu6IeWbM+gzNVXJcM9XV3SohHtmWE+3VGi496jvgX1jyvDTXfdK+rfZc8C1Aehk5" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/purecss@2.0.6/build/grids-responsive-min.css" />
+
+    <link rel="stylesheet" href="layout.css">
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.15.1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
+</head>
+
+<body>
+    <div class="pure-u-1-3">
+        <div id='text_div'>
+            <h1>Migration to Australia</h1>
+            <p>Number of migrants in 1980 and 2008 compared.
+            </p>
+        </div>
+    </div>
+    <div id="vis1"></div>
+
+    <div id="vis2"></div>
+        <script type="text/javascript">     
+            var vlSpec = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "data":{ 
+        "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/Australia%20data.csv"
+    },
+    "vconcat":[
+        {
+            
+            "width": 800,
+            "height": 450,
+            
+                "title": "Migration to Australia during 1980",
+            "projection": {"type": "equalEarth"},
+            
+            "data": {
+                "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/ne_50m_admin_0_countries.json",
+                "format": {"type": "topojson", "feature":"ne_50m_admin_0_countries"}
+            }, 
+            "transform": [
+                {
+                    "lookup": "properties.ADM0_A3",
+                    "from":{
+                        "data":{ 
+                            "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/Australia%20data.csv"
+                        },
+                    "key":"CODE",
+                    "fields":["1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2008"]
+                    }
+                }
+            ],
+            "params": [
+                {
+                    "name": "year_selection",
+                    "value":1980,
+                    "bind":{
+                        "input": "range",
+                        "min": 1980,
+                        "max": 2008,
+                        "step": 1,
+                        "name": "year: "
+                    }
+                }
+            ],
+            "mark":{"type": "geoshape"},
+            "encoding": {
+                "color":{
+                    "scale": {"domain": [10000, 60000], "scheme": "reds"},
+                    "field":"1980", 
+                    "type":"quantitative"
+                }
+                ,
+            "tooltip": [
+                {"field": "properties.NAME", "type": "nominal", "title":"Country"},
+                {"field":"1980", "type": "quantitative", "title":"no. migrated in 1980: "}
+            ]
+            }
+            
+            
+
+        },
+        {
+            "width": 800,
+            "height": 450,
+            "title": "Migration to Australia during 2008",
+            "projection": {"type": "equalEarth"},
+            "data": {
+                "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/ne_50m_admin_0_countries.json",
+                "format": {"type": "topojson", "feature":"ne_50m_admin_0_countries"}
+            }, 
+            "transform": [
+                {
+                    "lookup": "properties.ADM0_A3",
+                    "from":{
+                        "data":{ 
+                            "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/Australia%20data.csv"
+                        },
+                    "key":"CODE",
+                    "fields":["1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2008"]
+                    }
+                }
+            ],
+            
+            "mark":{"type": "geoshape"},
+            "encoding": {
+                "color":{
+                    "scale": {"domain": [10000, 66000], "scheme": "reds"},
+                    "field":"2008", 
+                    "type":"quantitative",
+                    "title":"no. migrated"
+                }
+                ,
+            "tooltip": [
+                {"field": "properties.NAME", "type": "nominal", "title":"Country"},
+                {"field":"2008", "type": "quantitative", "title":"no. migrated in 2008: "}
+            ]
+                }
+            }
+    ]
+            
+};
+  // optional argument passed to Vega-Embed to specify Vega-Lite spec. More info at https://github.com/vega/vega-embed
+  var opt = {
+    "mode": "vega-lite"
+  };
+
+  // Embed the visualization in the container with id `vis`
+  vegaEmbed("#vis1", vlSpec, opt).then(function(result) {
+    // Callback receiving the View instance and parsed Vega spec
+    // result.view is the View, which resides under the '#vis' element
+  }).catch(console.warn);
+        
+        
+
+
+         
+</script>
+<script type="text/javascript"> 
+    var v2Spec = {
+        
+        "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+        "data":{ 
+            "url": "https://raw.githubusercontent.com/asax0007/FIT3179_HW9/main/Australia%20data.csv"
+        },
+        "width": 800,
+        "height": 450,
+        "title": "Number of migrations to Australia",
+        "params": [
+            {
+            "name": "Continent_selection",
+            "bind": {
+            "input": "select",
+            "options": [
+            null,
+            "Northern America",
+            "Latin America and the Caribbean",
+            "Europe",
+            "Africa",
+            "Asia",
+            "Oceania"            
+            ],
+            "labels":[
+                "Show All",
+                "Northern America",
+                "Latin America and the Caribbean",
+                "Europe",
+                "Africa",
+                "Asia",
+                "Oceania"
+                ],
+            "name": "Continent Selection: "
+            }
+        }
+        ],
+        "transform": [
+            {"filter": "Continent_selection == null || datum.AreaName == Continent_selection"}
+        ],
+        "mark": {
+            "type": "point",
+            "size": 200
+        },
+        "encoding": {
+            "x": {
+                "field": "1980",
+                "type": "quantitative",
+                "title": "Number of migrants in 1980",
+                "scale": {"type": "log", "domain": [1, 50000]}
+            },
+            "y": {
+                "field": "2008",
+                "type": "quantitative",
+                "title":"Number of migrants in 2008",
+                "scale": {"type": "log", "domain": [1, 70000]}
+            },
+            "color": {
+                "field": "OdName","type": "nominal", "title":"Countries"
+            },
+            "shape": {"field": "AreaName", "type": "nominal", "title":"Continents"},
+    
+            "tooltip": [
+                {"field": "OdName", "type": "nominal","title":"Country:"},
+                {"field":"AreaName", "type": "nominal","title":"Continent"},
+                {"field": "1980", "type": "quantitative", "title":"Migrants in 1980"},
+                {"field": "2008", "type": "quantitative", "title":"Migrants in 2008"}
+            ]
+    }
+    
+                }
+                      // optional argument passed to Vega-Embed to specify Vega-Lite spec. More info at https://github.com/vega/vega-embed
+var opt = {
+"mode": "vega-lite"
+};
+
+// Embed the visualization in the container with id `vis`
+vegaEmbed("#vis2", v2Spec, opt)
+    </script>
+        
+                            
+          
+          
+          
+          
+
+    
+</body>
+
+</html>
